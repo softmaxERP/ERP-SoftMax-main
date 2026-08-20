@@ -1,33 +1,28 @@
 <template>
-	<div class="login-container">
-		<el-row class="login-row">
-			<!-- Left Side: Branding and Mascots (Hidden on mobile) -->
-			<el-col :xs="0" :sm="0" :md="12" :lg="14" :xl="16" class="login-left">
-				<div class="brand-content">
-					<div class="logos">
-						<img src="/login-assets/ChatGPT-Image-20-ส.ค.-2569-15_04_19-_5_.svg" alt="Thai Logo" class="logo-top" />
-						<img src="/login-assets/ChatGPT-Image-20-ส.ค.-2569-15_04_19-_8_.svg" alt="QSNICH Icon" class="logo-middle" />
+	<el-scrollbar class="login-page" :height="`${options.scrollerHeight}px`">
+		<el-row class="mt-20 mb-20 p-5" style="align-items: center; min-height: 80vh;" justify="space-around">
+			<!-- ฝั่งซ้าย ปรับขนาด Column ให้สมดุลขึ้น -->
+			<el-col :xs="0" :sm="10" :md="11" :lg="10" :xl="9" class="left-column">
+				<div class="left-layout">
+					<!-- แถวที่ 1 -->
+					<div class="image-slot slot-2">
+						<img src="/login-assets/circle-logo.png" alt="QSNICH Circle Logo" class="circle-logo-img" />
 					</div>
-					<h1 class="brand-title">QSNICH</h1>
-					<h2 class="brand-subtitle">— ERP —</h2>
-					<p class="brand-desc">
-						Smart Hospital Management<br />
-						for Children's Health &amp; Care
-					</p>
-					
-					<div class="mascots">
-						<!-- Using one of the large SVGs for the mascot layout -->
-						<img src="/login-assets/ChatGPT-Image-20-ส.ค.-2569-15_04_19-_1_.svg" alt="Mascots" class="mascot-img" />
+					<!-- แถวที่ 2 -->
+					<div class="image-slot slot-3">
+						<img src="/login-assets/text-logo.png" alt="QSNICH Text Logo" class="text-logo-img" />
+					</div>
+					<!-- แถวที่ 3 (Mascot) -->
+					<div class="image-slot slot-4">
+						<img src="/login-assets/QSNICH_mascot.svg" alt="QSNICH Mascot" class="mascot-svg" />
 					</div>
 				</div>
 			</el-col>
-
-			<!-- Right Side: Login Form -->
-			<el-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8" class="login-right">
-				<el-card shadow="never" class="login-card">
+			<el-col :xs="24" :sm="14" :md="11" :lg="9" :xl="7" class="right-column">
+				<el-card shadow="never" class="box-card custom-card">
 					<div class="form-header">
-						<h2 class="welcome-text">Welcome <span class="text-blue">Back</span></h2>
-						<p class="welcome-sub">Sign in to continue to {{ !!appState.params.app_name ? appState.params.app_name : APP_NAME }}</p>
+						<h2 class="welcome-text"><span class="text-dark-blue">Welcome</span> <span class="text-blue">Back</span></h2>
+						<p class="welcome-sub">Sign in to continue to QSNICH - ERP</p>
 					</div>
 
 					<el-form ref="loginFormRef" :model="loginModel" :label-position="'left'" :size="'large'" @keyup.enter.prevent="submitForm(loginFormRef)">
@@ -50,9 +45,8 @@
 							<span>or continue with</span>
 						</div>
 
-						<el-button v-if="!!appState.params.google_oauth2" class="google-btn" @click="redirectToGoogleOauth2">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" class="google-icon" />
-							<span>Google Login</span>
+						<el-button class="google-btn" @click="redirectToGoogleOauth2">
+							<svg-icon icon-name="icon-google" class="google-icon" /> <span>Google Login</span>
 						</el-button>
 
 						<div class="form-footer">
@@ -61,7 +55,6 @@
 						</div>
 					</el-form>
 
-					<!-- 2FA Form -->
 					<el-form
 						v-if="!!userState.require2FA"
 						ref="login2faFormRef"
@@ -81,7 +74,7 @@
 				</el-card>
 			</el-col>
 		</el-row>
-	</div>
+	</el-scrollbar>
 </template>
 
 <script lang="ts" setup>
@@ -106,7 +99,9 @@ let resizeCleanup: (() => void) | undefined;
 onUnmounted(() => resizeCleanup?.());
 
 onMounted(() => {
-	appState.isDark = useDark();
+	const isDark = useDark();
+	isDark.value = false; // Force light mode for the login page
+	appState.isDark = isDark;
 
 	options.scrollerHeight = window.innerHeight;
 	resizeCleanup = onWindowResizeHandler(async () => {
@@ -172,107 +167,89 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <style lang="scss" scoped>
-.login-container {
-	min-height: 100vh;
-	width: 100%;
-	background-color: #dcedff; /* Light blue fallback */
-	background-image: url('/login-assets/ChatGPT-Image-20-ส.ค.-2569-15_04_19-_4_.svg');
+.login-page {
+	background-color: #f1f5f9;
+	background-image: url('/login-assets/bg-new.png');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
+	/* เพื่อให้ภาพ Responsive เวลาหน้าจอเปลี่ยนขนาด */
+	min-height: 100vh;
+}
+
+.left-column {
 	display: flex;
-	align-items: center;
 	justify-content: center;
-	overflow: hidden;
 }
 
-.login-row {
-	width: 100%;
-	max-width: 1400px;
-	margin: 0 auto;
-	height: 100vh;
-}
-
-.login-left {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-}
-
-.brand-content {
-	text-align: center;
-	color: #1e3a8a;
-	padding: 2rem;
-	animation: fadeIn 1s ease-in-out;
-}
-
-.logos {
+.left-layout {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 15px;
-	margin-bottom: 20px;
-}
-
-.logo-top {
-	height: 80px;
-	object-fit: contain;
-}
-
-.logo-middle {
-	height: 100px;
-	object-fit: contain;
-}
-
-.brand-title {
-	font-size: 3.5rem;
-	font-weight: 800;
-	color: #2563eb;
-	margin: 0;
-	letter-spacing: 2px;
-}
-
-.brand-subtitle {
-	font-size: 2rem;
-	font-weight: 700;
-	color: #3b82f6;
-	margin: 5px 0 15px 0;
-}
-
-.brand-desc {
-	font-size: 1.1rem;
-	color: #1e40af;
-	font-weight: 500;
-	margin-bottom: 40px;
-}
-
-.mascots {
-	margin-top: 20px;
-}
-
-.mascot-img {
-	max-width: 450px;
-	width: 100%;
-	object-fit: contain;
-}
-
-.login-right {
-	display: flex;
-	align-items: center;
 	justify-content: center;
-	padding: 20px;
+	width: 100%;
+	gap: 15px;
+	position: relative;
+	top: 15px; /* ลดการขยับลงล่างนิดนึงให้พอดีกับกล่องขวา */
 }
 
-.login-card {
+.image-slot {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 100%;
-	max-width: 440px;
+}
+
+/* ลำดับที่ 1: โลโก้บนสุด */
+.top-logo-img {
+	max-width: 90px; /* ปรับให้เล็กลงมาก ตามคำขอ เพื่อไม่ให้แย่งซีน */
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+/* เทคนิคลบพื้นหลังสีขาวด้วย CSS */
+.blend-multiply {
+	mix-blend-mode: multiply;
+}
+
+/* ลำดับที่ 2: โลโก้วงกลม */
+.circle-logo-img {
+	max-width: 130px; /* ขยายขึ้นให้สมดุลเมื่อเหลือ 3 ชั้น */
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+/* ลำดับที่ 3: โลโก้ตัวอักษร */
+.text-logo-img {
+	max-width: 260px; /* ขยายข้อความให้เด่นขึ้น */
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+/* ลำดับที่ 4: Mascot หุ่นยนต์ */
+.mascot-svg {
+	max-width: 320px; /* ขยายฐานให้ใหญ่ขึ้น ให้เต็มพื้นที่สวยงาม */
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+.custom-card {
 	border-radius: 24px;
-	padding: 30px 20px;
+	padding: 20px 10px;
 	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 	border: none;
-	background: rgba(255, 255, 255, 0.95);
-	backdrop-filter: blur(10px);
+	background: #ffffff;
+}
+
+@media (min-width: 768px) {
+	.right-column {
+		position: relative;
+		right: 150px; /* ขยับกล่องฝั่งขวามาทางซ้ายเป็น 150px ตามคำขอ */
+	}
 }
 
 .form-header {
@@ -281,14 +258,17 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 }
 
 .welcome-text {
-	font-size: 2rem;
+	font-size: 2.2rem;
 	font-weight: 700;
-	color: #1e293b;
 	margin: 0 0 10px 0;
 }
 
+.text-dark-blue {
+	color: #1e3a8a;
+}
+
 .text-blue {
-	color: #4f46e5;
+	color: #3b82f6;
 }
 
 .welcome-sub {
@@ -298,20 +278,21 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 }
 
 .custom-input {
-	--el-input-bg-color: #f8fafc;
+	--el-input-bg-color: #ffffff;
 	--el-input-border-color: #e2e8f0;
 	--el-input-border-radius: 12px;
+	--el-input-text-color: #1e293b;
 }
 
 .custom-input :deep(.el-input__wrapper) {
 	box-shadow: 0 0 0 1px var(--el-input-border-color) inset;
-	padding: 8px 15px;
+	padding: 10px 15px;
 }
 
 .form-options {
 	display: flex;
 	justify-content: flex-start;
-	margin-bottom: 20px;
+	margin-bottom: 25px;
 	margin-top: -5px;
 }
 
@@ -321,8 +302,9 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 	padding: 22px 0;
 	font-size: 1.1rem;
 	font-weight: 600;
-	background: linear-gradient(135deg, #60a5fa, #818cf8);
+	background: linear-gradient(to right, #00c6ff, #0072ff);
 	border: none;
+	color: white;
 	transition: opacity 0.2s;
 }
 
@@ -357,6 +339,7 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 	font-size: 1rem;
 	font-weight: 600;
 	color: #475569;
+	background-color: #ffffff;
 	border: 1px solid #e2e8f0;
 	display: flex;
 	align-items: center;
@@ -367,6 +350,21 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 .google-icon {
 	width: 20px;
 	height: 20px;
+	margin-right: 5px;
+}
+
+:deep(.el-checkbox__label) {
+	color: #64748b !important;
+}
+
+:deep(.el-checkbox__inner) {
+	background-color: #ffffff !important;
+	border-color: #cbd5e1 !important;
+}
+
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+	background-color: #3b82f6 !important;
+	border-color: #3b82f6 !important;
 }
 
 .form-footer {
@@ -376,22 +374,8 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 	padding: 0 10px;
 }
 
+// จัด OTP input ให้อยู่กลาง form-item
 .otp-form-item :deep(.el-form-item__content) {
 	justify-content: center;
-}
-
-.dark .login-container {
-	background: linear-gradient(to bottom, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-}
-.dark .login-card {
-	background: #1e293b;
-}
-.dark .welcome-text {
-	color: #f1f5f9;
-}
-
-@keyframes fadeIn {
-	from { opacity: 0; transform: translateY(20px); }
-	to { opacity: 1; transform: translateY(0); }
 }
 </style>
