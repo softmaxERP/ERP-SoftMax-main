@@ -39,7 +39,7 @@ import { storeToRefs } from 'pinia';
 import { onWindowResizeHandler } from './utils/Util';
 import { useConnectStateStore } from './stores/ConnectState';
 
-const publicPages = ['login'];
+const publicPages = ['Login'];
 const route = useRoute();
 const route_name: any = computed(() => route.name || 'sdform');
 
