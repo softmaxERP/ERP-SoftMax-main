@@ -9,7 +9,7 @@
 			<SdGridColumnIndex :ref-sdgrid="refGrid" />
 			<el-table-column prop="file_name" label="File Name" sortable>
 				<template #default="scope">
-					<el-link :href="getUrl(scope.row)" target="_blank">{{ scope.row.file_name }}</el-link>
+					<el-link  underline="hover" :href="getUrl(scope.row)" target="_blank">{{ scope.row.file_name }}</el-link>
 				</template>
 			</el-table-column>
 			<el-table-column prop="file_group" label="Group" width="180" sortable />
