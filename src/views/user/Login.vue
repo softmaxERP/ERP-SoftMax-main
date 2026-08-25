@@ -50,8 +50,8 @@
 						</el-button>
 
 						<div class="form-footer">
-							<el-link type="primary" :underline="false" icon="Lock" @click="router.push('/user/forgot-password')">Forgot your password?</el-link>
-							<el-link type="primary" :underline="false" icon="User" @click="router.push('/user/register')">Sign Up</el-link>
+							<el-link type="primary" underline="never" icon="Lock" @click="router.push('/user/forgot-password')">Forgot your password?</el-link>
+							<el-link type="primary" underline="never" icon="User" @click="router.push('/user/register')">Sign Up</el-link>
 						</div>
 					</el-form>
 
