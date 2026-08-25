@@ -1,58 +1,45 @@
 <template>
 	<el-scrollbar class="login-page" :height="`${options.scrollerHeight}px`">
-		<el-row class="mt-20 mb-20 p-5" style="align-items: center; min-height: 80vh;" justify="space-around">
-			<!-- ฝั่งซ้าย ปรับขนาด Column ให้สมดุลขึ้น -->
-			<el-col :xs="0" :sm="10" :md="11" :lg="10" :xl="9" class="left-column">
-				<div class="left-layout">
-					<!-- แถวที่ 1 -->
-					<div class="image-slot slot-2">
-						<img src="/login-assets/circle-logo.png" alt="QSNICH Circle Logo" class="circle-logo-img" />
-					</div>
-					<!-- แถวที่ 2 -->
-					<div class="image-slot slot-3">
-						<img src="/login-assets/text-logo.png" alt="QSNICH Text Logo" class="text-logo-img" />
-					</div>
-					<!-- แถวที่ 3 (Mascot) -->
-					<div class="image-slot slot-4">
-						<img src="/login-assets/QSNICH_mascot.svg" alt="QSNICH Mascot" class="mascot-svg" />
-					</div>
-				</div>
-			</el-col>
-			<el-col :xs="24" :sm="14" :md="11" :lg="9" :xl="7" class="right-column">
-				<el-card shadow="never" class="box-card custom-card">
-					<div class="form-header">
-						<h2 class="welcome-text"><span class="text-dark-blue">Welcome</span> <span class="text-blue">Back</span></h2>
-						<p class="welcome-sub">Sign in to continue to QSNICH - ERP</p>
-					</div>
+		<el-row class="mt-20 mb-20 p-5">
+			<el-col :xs="0" :sm="5" :md="7" :lg="8" :xl="9"></el-col>
+			<el-col :xs="24" :sm="14" :md="10" :lg="8" :xl="6">
+				<el-card shadow="never" class="box-card">
+					<el-row class="mb-3">
+						<el-col :span="24" class="text-8" style="text-align: center; font-weight: 400; margin: 10px 0px">
+							<span style="position: relative">
+								<el-avatar v-if="options.logoType === 'img'" shape="square" :size="58" :src="APP_IMG_LOGO" style="margin-right: 130px" />
+								<SvgIcon v-else :icon-name="!!appState.params.app_svg_logo ? appState.params.app_svg_logo : APP_SVG_LOGO" class="mr-1 text-28" />
+								<div class="ml-1" style="">
+									{{ !!appState.params.app_name ? appState.params.app_name : APP_NAME }}
+								</div>
+							</span>
+						</el-col>
+						<el-col :span="24" class="text-5" style="text-align: center; margin: 10px 0px; color: #626aef"> Welcome Back </el-col>
+						<el-col :span="24" class="text-3.3" style="text-align: center; margin: 10px 0px">
+							<el-icon><Unlock /></el-icon> Sign in to continue to {{ !!appState.params.app_name ? appState.params.app_name : APP_NAME }}
+						</el-col>
+					</el-row>
 
 					<el-form ref="loginFormRef" :model="loginModel" :label-position="'left'" :size="'large'" @keyup.enter.prevent="submitForm(loginFormRef)">
 						<el-form-item prop="username" required>
-							<el-input v-model="loginModel.username" placeholder="Username" type="text" :clearable="true" prefix-icon="User" class="custom-input" />
+							<el-input v-model="loginModel.username" placeholder="Username" type="text" :clearable="true" prefix-icon="User" />
 						</el-form-item>
 						<el-form-item prop="password" required>
-							<el-input v-model="loginModel.password" placeholder="Password" type="password" :clearable="true" autocomplete="off" prefix-icon="Lock" show-password class="custom-input" />
+							<el-input v-model="loginModel.password" placeholder="Password" type="password" :clearable="true" autocomplete="off" prefix-icon="Key" show-password />
 						</el-form-item>
-						
-						<div class="form-options">
-							<el-checkbox v-model="loginModel.remember" label="Remember me" />
-						</div>
-
-						<el-button type="primary" class="login-btn" @click.prevent="submitForm(loginFormRef)" icon="Unlock">
-							Login
-						</el-button>
-
-						<div class="divider">
-							<span>or continue with</span>
-						</div>
-
-						<el-button class="google-btn" @click="redirectToGoogleOauth2">
-							<svg-icon icon-name="icon-google" class="google-icon" /> <span>Google Login</span>
-						</el-button>
-
-						<div class="form-footer">
-							<el-link type="primary" :underline="false" icon="Lock" @click="router.push('/user/forgot-password')">Forgot your password?</el-link>
-							<el-link type="primary" :underline="false" icon="User" @click="router.push('/user/register')">Sign Up</el-link>
-						</div>
+						<el-checkbox v-model="loginModel.remember" label="Remember me" />
+						<el-row class="mb-3">
+							<el-button type="primary" round plain @click.prevent="submitForm(loginFormRef)" icon="Unlock" style="width: 100%"> Login </el-button>
+						</el-row>
+						<el-row class="mb-3">
+							<el-button type="info" icon="Key" round plain style="width: 100%" @click="router.push('/user/forgot-password')"> Forgot your password? </el-button>
+						</el-row>
+						<el-row class="mb-3">
+							<el-button type="success" icon="User" round plain style="width: 100%" @click="router.push('/user/register')"> Sign Up </el-button>
+						</el-row>
+						<el-row class="mb-3" v-if="!!appState.params.google_oauth2">
+							<el-button round plain style="width: 100%" @click="redirectToGoogleOauth2"><svg-icon icon-name="icon-google" /> <span>Google Login</span> </el-button>
+						</el-row>
 					</el-form>
 
 					<el-form
@@ -62,14 +49,17 @@
 						label-position="top"
 						size="large"
 						:label-width="'140px'"
-						@keyup.enter.prevent="login2FAForm(login2faFormRef)"
-						class="mt-4"
-					>
+						@keyup.enter.prevent="login2FAForm(login2faFormRef)">
 						<el-form-item label="Two-Factor Authentication" prop="token" :rules="otpRules" class="otp-form-item">
 							<el-input-otp v-model="verify2FA.token" :length="6" @finish="login2FAForm(login2faFormRef)" />
 						</el-form-item>
-						<el-button type="primary" class="login-btn mt-3" icon="Ticket" @click.prevent="login2FAForm(login2faFormRef)">Verify</el-button>
-						<el-button type="info" class="google-btn mt-2" icon="ArrowLeftBold" @click="black2Login">Go back</el-button>
+
+						<el-row class="mb-3">
+							<el-button type="primary" icon="Ticket" round plain style="width: 100%" @click.prevent="login2FAForm(login2faFormRef)">Verify</el-button>
+						</el-row>
+						<el-row class="mb-3">
+							<el-button type="info" icon="ArrowLeftBold" round plain style="width: 100%" @click="black2Login"> Go back </el-button>
+						</el-row>
 					</el-form>
 				</el-card>
 			</el-col>
@@ -99,9 +89,7 @@ let resizeCleanup: (() => void) | undefined;
 onUnmounted(() => resizeCleanup?.());
 
 onMounted(() => {
-	const isDark = useDark();
-	isDark.value = false; // Force light mode for the login page
-	appState.isDark = isDark;
+	appState.isDark = useDark();
 
 	options.scrollerHeight = window.innerHeight;
 	resizeCleanup = onWindowResizeHandler(async () => {
@@ -168,214 +156,20 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 
 <style lang="scss" scoped>
 .login-page {
-	background-color: #f1f5f9;
-	background-image: url('/login-assets/bg-new.png');
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	/* เพื่อให้ภาพ Responsive เวลาหน้าจอเปลี่ยนขนาด */
-	min-height: 100vh;
-}
-
-.left-column {
-	display: flex;
-	justify-content: center;
-}
-
-.left-layout {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	gap: 15px;
-	position: relative;
-	top: 15px; /* ลดการขยับลงล่างนิดนึงให้พอดีกับกล่องขวา */
-}
-
-.image-slot {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-}
-
-/* ลำดับที่ 1: โลโก้บนสุด */
-.top-logo-img {
-	max-width: 90px; /* ปรับให้เล็กลงมาก ตามคำขอ เพื่อไม่ให้แย่งซีน */
-	width: 100%;
-	height: auto;
-	object-fit: contain;
-}
-
-/* เทคนิคลบพื้นหลังสีขาวด้วย CSS */
-.blend-multiply {
-	mix-blend-mode: multiply;
-}
-
-/* ลำดับที่ 2: โลโก้วงกลม */
-.circle-logo-img {
-	max-width: 130px; /* ขยายขึ้นให้สมดุลเมื่อเหลือ 3 ชั้น */
-	width: 100%;
-	height: auto;
-	object-fit: contain;
-}
-
-/* ลำดับที่ 3: โลโก้ตัวอักษร */
-.text-logo-img {
-	max-width: 260px; /* ขยายข้อความให้เด่นขึ้น */
-	width: 100%;
-	height: auto;
-	object-fit: contain;
-}
-
-/* ลำดับที่ 4: Mascot หุ่นยนต์ */
-.mascot-svg {
-	max-width: 320px; /* ขยายฐานให้ใหญ่ขึ้น ให้เต็มพื้นที่สวยงาม */
-	width: 100%;
-	height: auto;
-	object-fit: contain;
-}
-
-.custom-card {
-	border-radius: 24px;
-	padding: 20px 10px;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-	border: none;
-	background: #ffffff;
-}
-
-@media (min-width: 768px) {
-	.right-column {
-		position: relative;
-		right: 150px; /* ขยับกล่องฝั่งขวามาทางซ้ายเป็น 150px ตามคำขอ */
-	}
-}
-
-.form-header {
-	text-align: center;
-	margin-bottom: 30px;
-}
-
-.welcome-text {
-	font-size: 2.2rem;
-	font-weight: 700;
-	margin: 0 0 10px 0;
-}
-
-.text-dark-blue {
-	color: #1e3a8a;
-}
-
-.text-blue {
-	color: #3b82f6;
-}
-
-.welcome-sub {
-	color: #64748b;
-	font-size: 0.95rem;
-	margin: 0;
-}
-
-.custom-input {
-	--el-input-bg-color: #ffffff;
-	--el-input-border-color: #e2e8f0;
-	--el-input-border-radius: 12px;
-	--el-input-text-color: #1e293b;
-}
-
-.custom-input :deep(.el-input__wrapper) {
-	box-shadow: 0 0 0 1px var(--el-input-border-color) inset;
-	padding: 10px 15px;
-}
-
-.form-options {
-	display: flex;
-	justify-content: flex-start;
-	margin-bottom: 25px;
-	margin-top: -5px;
-}
-
-.login-btn {
-	width: 100%;
-	border-radius: 12px;
-	padding: 22px 0;
-	font-size: 1.1rem;
-	font-weight: 600;
-	background: linear-gradient(to right, #00c6ff, #0072ff);
-	border: none;
-	color: white;
-	transition: opacity 0.2s;
-}
-
-.login-btn:hover {
-	opacity: 0.9;
-}
-
-.divider {
-	display: flex;
-	align-items: center;
-	text-align: center;
-	margin: 25px 0;
-	color: #94a3b8;
-	font-size: 0.85rem;
-}
-
-.divider::before,
-.divider::after {
-	content: '';
-	flex: 1;
-	border-bottom: 1px solid #e2e8f0;
-}
-
-.divider span {
-	padding: 0 15px;
-}
-
-.google-btn {
-	width: 100%;
-	border-radius: 12px;
-	padding: 22px 0;
-	font-size: 1rem;
-	font-weight: 600;
-	color: #475569;
-	background-color: #ffffff;
-	border: 1px solid #e2e8f0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-}
-
-.google-icon {
-	width: 20px;
-	height: 20px;
-	margin-right: 5px;
-}
-
-:deep(.el-checkbox__label) {
-	color: #64748b !important;
-}
-
-:deep(.el-checkbox__inner) {
-	background-color: #ffffff !important;
-	border-color: #cbd5e1 !important;
-}
-
-:deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
-	background-color: #3b82f6 !important;
-	border-color: #3b82f6 !important;
-}
-
-.form-footer {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 25px;
-	padding: 0 10px;
+	background-color: #8ec5fc;
+	background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
 }
 
 // จัด OTP input ให้อยู่กลาง form-item
 .otp-form-item :deep(.el-form-item__content) {
 	justify-content: center;
+}
+
+.dark .login-page {
+	// background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+	background:
+		linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.15) 100%),
+		radial-gradient(at top center, rgba(255, 255, 255, 0.4) 0%, rgba(0, 0, 0, 0.4) 120%) #989898;
+	background-blend-mode: multiply, multiply;
 }
 </style>
