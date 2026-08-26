@@ -50,8 +50,8 @@
 						</el-button>
 
 						<div class="form-footer">
-							<el-link type="primary" underline="never" icon="Lock" @click="router.push('/user/forgot-password')">Forgot your password?</el-link>
-							<el-link type="primary" underline="never" icon="User" @click="router.push('/user/register')">Sign Up</el-link>
+							<el-link type="primary" :underline="false" icon="Lock" @click="router.push('/user/forgot-password')">Forgot your password?</el-link>
+							<el-link type="primary" :underline="false" icon="User" @click="router.push('/user/register')">Sign Up</el-link>
 						</div>
 					</el-form>
 
@@ -246,9 +246,26 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 }
 
 @media (min-width: 768px) {
+	.left-column {
+		position: relative;
+		right: 30px; /* จอเล็ก ดันซ้ายน้อย ๆ กันภาพโดนตัดขอบ */
+	}
+
 	.right-column {
 		position: relative;
 		right: 150px; /* ขยับกล่องฝั่งขวามาทางซ้ายเป็น 150px ตามคำขอ */
+	}
+}
+
+@media (min-width: 992px) {
+	.left-column {
+		right: 60px; /* จอกลาง ขยับซ้ายเพิ่ม */
+	}
+}
+
+@media (min-width: 1200px) {
+	.left-column {
+		right: 100px; /* จอใหญ่ ขยับซ้ายสุด — ปรับเลขนี้เป็นหลัก */
 	}
 }
 
