@@ -5,7 +5,9 @@
 			:style="`width: ${!!fixedEnable ? `${menuWidthOnexpand}px` : ''}; 
 			min-height: ${!!fixedEnable ? `${scrollerHeight}px` : ''}; 
 			${!!borderDisable ? `border: inherit;` : ''}
-			${!!bgColor ? `background-color: ${bgColor};` : ''} ${!!borderColor ? `border-color: ${borderColor};` : ''}`"
+			--side-sub-menu-bg-color: color-mix(in srgb, ${bgColor || 'var(--el-bg-color)'} 92%, white);
+			${!!bgColor ? `background-color: ${bgColor};` : ''}
+			${!!borderColor ? `border-color: ${borderColor};` : ''}`"
 			:collapse="isCollapse"
 			:collapse-transition="false"
 			:unique-opened="uniqueOpened"
@@ -222,4 +224,13 @@ export default defineComponent({
 	},
 });
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+/*
+ * Element Plus ใช้ --el-menu-bg-color ร่วมกันทั้ง navbar dropdown และ sidebar.
+ * จำกัดสีที่อ่อนขึ้นไว้ใต้ .side-menu เท่านั้น เพื่อไม่ให้กระทบ navbar/main content.
+ */
+.side-menu :deep(.el-menu--inline) {
+	--el-menu-bg-color: var(--side-sub-menu-bg-color);
+	background-color: var(--side-sub-menu-bg-color);
+}
+</style>
