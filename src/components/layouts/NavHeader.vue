@@ -407,7 +407,7 @@ const updateViewNotify = async () => {
 .el-sub-menu .el-icon {
 	margin-right: 0px;
 }
-.el-sub-menu.menu-custom .el-icon.icon-logo {
+.el-sub-menu.menu-custom .logo-container .el-icon.icon-logo {
 	width: 42px;
 	height: 42px;
 	margin-right: 0;
