@@ -49,7 +49,7 @@
 		</el-sub-menu>
 
 		<div class="flex-grow" />
-		<el-sub-menu index="2" v-if="!!userState.user">
+		<el-sub-menu index="2" v-if="!!userState.user" popper-class="navbar-account-popper">
 			<template #title>
 				<el-avatar :src="userState.getAvatar()" :size="24" class="mr-1" />
 				{{ !!userState.user ? 'Hi' : '' }} {{ userState.user?.fname }}
@@ -375,6 +375,13 @@ const updateViewNotify = async () => {
 </script>
 
 <style lang="scss">
+// The account popup is teleported outside the navbar. Keep its normal text
+// color on hover/focus without changing the shared active color or backgrounds.
+.navbar-account-popper .el-menu-item:not(.is-disabled):not(.is-active):hover,
+.navbar-account-popper .el-menu-item:not(.is-disabled):not(.is-active):focus {
+	color: var(--el-menu-text-color);
+}
+
 .menu-custom {
 	.el-sub-menu__title {
 		padding-left: 10px !important;
