@@ -14,7 +14,7 @@
 					<div style="flex-shrink: 0; display: flex; align-items: center">
 						<el-avatar v-if="options.logoType === 'img'" shape="square" :size="42" :src="APP_IMG_LOGO" />
 						<el-icon v-else class="svg-icon mr-1 text-22 icon-logo">
-							<img :src="navbarBabyLogo" alt="" width="35" height="35" style="display: block; object-fit: contain" />
+							<img :src="navbarBabyLogo" alt="" width="42" height="42" style="display: block; width: 42px; height: 42px; max-width: none; flex-shrink: 0; object-fit: contain" />
 						</el-icon>
 					</div>
 
