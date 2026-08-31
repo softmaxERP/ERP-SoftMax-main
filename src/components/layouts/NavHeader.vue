@@ -376,10 +376,13 @@ const updateViewNotify = async () => {
 
 <style lang="scss">
 // The account popup is teleported outside the navbar. Keep its normal text
-// color on hover/focus without changing the shared active color or backgrounds.
+// color on hover/focus without changing shared theme colors. Derive the row
+// highlight from this popup's own palette, including custom colors in dark mode.
 .navbar-account-popper .el-menu-item:not(.is-disabled):not(.is-active):hover,
 .navbar-account-popper .el-menu-item:not(.is-disabled):not(.is-active):focus {
 	color: var(--el-menu-text-color);
+	background-color: var(--el-menu-bg-color);
+	background-color: color-mix(in srgb, var(--el-menu-bg-color) 90%, var(--el-menu-text-color));
 }
 
 .menu-custom {
