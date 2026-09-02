@@ -6,6 +6,7 @@
 			min-height: ${!!fixedEnable ? `${scrollerHeight}px` : ''}; 
 			${!!borderDisable ? `border: inherit;` : ''}
 			--side-sub-menu-bg-color: color-mix(in srgb, ${bgColor || 'var(--el-bg-color)'} 92%, white);
+			--side-active-menu-bg-color: color-mix(in srgb, var(--side-sub-menu-bg-color) 90%, white);
 			${!!bgColor ? `background-color: ${bgColor};` : ''}
 			${!!borderColor ? `border-color: ${borderColor};` : ''}`"
 			:collapse="isCollapse"
@@ -232,5 +233,10 @@ export default defineComponent({
 .side-menu :deep(.el-menu--inline) {
 	--el-menu-bg-color: var(--side-sub-menu-bg-color);
 	background-color: var(--side-sub-menu-bg-color);
+}
+
+/* ทำให้ผู้ใช้เห็นหน้าปัจจุบัน โดยคงสีตัวอักษรและจำกัดผลเฉพาะเมนูย่อย */
+.side-menu :deep(.el-menu--inline .el-menu-item.is-active) {
+	background-color: var(--side-active-menu-bg-color);
 }
 </style>
