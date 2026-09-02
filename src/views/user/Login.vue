@@ -2,19 +2,19 @@
 	<el-scrollbar class="login-page" :height="`${options.scrollerHeight}px`">
 		<el-row class="mt-20 mb-20 p-5" style="align-items: center; min-height: 80vh;" justify="space-around">
 			<!-- ฝั่งซ้าย ปรับขนาด Column ให้สมดุลขึ้น -->
-			<el-col :xs="0" :sm="10" :md="11" :lg="10" :xl="9" class="left-column">
+			<el-col v-if="options.showArtwork" :xs="0" :sm="10" :md="11" :lg="10" :xl="9" class="left-column">
 				<div class="left-layout">
 					<!-- แถวที่ 1 -->
 					<div class="image-slot slot-2">
-						<img src="/login-assets/circle-logo.png" alt="QSNICH Circle Logo" class="circle-logo-img" />
+						<img src="/login-assets/circle-logo-login.webp" alt="QSNICH Circle Logo" class="circle-logo-img" width="260" height="260" decoding="async" />
 					</div>
 					<!-- แถวที่ 2 -->
 					<div class="image-slot slot-3">
-						<img src="/login-assets/text-logo.png" alt="QSNICH Text Logo" class="text-logo-img" />
+						<img src="/login-assets/text-logo-login.webp" alt="QSNICH Text Logo" class="text-logo-img" width="520" height="208" decoding="async" />
 					</div>
 					<!-- แถวที่ 3 (Mascot) -->
 					<div class="image-slot slot-4">
-						<img src="/login-assets/QSNICH_mascot.svg" alt="QSNICH Mascot" class="mascot-svg" />
+						<img src="/login-assets/mascot-login.webp" alt="QSNICH Mascot" class="mascot-img" width="560" height="560" decoding="async" />
 					</div>
 				</div>
 			</el-col>
@@ -93,6 +93,7 @@ const userState = useConnectStateStore();
 const options = reactive<any>({
 	scrollerHeight: 0,
 	logoType: APP_LOGO_TYPE,
+	showArtwork: window.innerWidth >= 768,
 });
 
 let resizeCleanup: (() => void) | undefined;
@@ -107,6 +108,7 @@ onMounted(() => {
 	resizeCleanup = onWindowResizeHandler(async () => {
 		await nextTick(() => {
 			options.scrollerHeight = window.innerHeight;
+			options.showArtwork = window.innerWidth >= 768;
 		});
 	});
 });
@@ -169,7 +171,7 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 <style lang="scss" scoped>
 .login-page {
 	background-color: #f1f5f9;
-	background-image: url('/login-assets/bg-new.png');
+	background-image: url('/login-assets/bg-login.webp');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -230,11 +232,13 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 }
 
 /* ลำดับที่ 4: Mascot หุ่นยนต์ */
-.mascot-svg {
-	max-width: 320px; /* ขยายฐานให้ใหญ่ขึ้น ให้เต็มพื้นที่สวยงาม */
+.mascot-img {
+	max-width: 280px;
 	width: 100%;
 	height: auto;
 	object-fit: contain;
+	/* วางเท้าลงบนแนวพื้น โดยลดขนาดแล้วจึงเลื่อนลงเพื่อไม่ให้ทับรถ */
+	transform: translateY(clamp(70px, 10vh, 100px));
 }
 
 .custom-card {
@@ -254,6 +258,44 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 	.right-column {
 		position: relative;
 		right: 150px; /* ขยับกล่องฝั่งขวามาทางซ้ายเป็น 150px ตามคำขอ */
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	.left-layout {
+		gap: 10px;
+	}
+
+	.circle-logo-img {
+		max-width: 90px;
+	}
+
+	.text-logo-img {
+		max-width: 180px;
+	}
+
+	.mascot-img {
+		max-width: 210px;
+		transform: translateY(clamp(32px, 6vh, 50px));
+	}
+}
+
+@media (min-width: 768px) and (max-height: 760px) {
+	.left-layout {
+		gap: 8px;
+	}
+
+	.circle-logo-img {
+		max-width: 85px;
+	}
+
+	.text-logo-img {
+		max-width: 180px;
+	}
+
+	.mascot-img {
+		max-width: 210px;
+		transform: translateY(42px);
 	}
 }
 
