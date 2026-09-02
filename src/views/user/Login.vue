@@ -93,7 +93,7 @@ const userState = useConnectStateStore();
 const options = reactive<any>({
 	scrollerHeight: 0,
 	logoType: APP_LOGO_TYPE,
-	showArtwork: window.innerWidth >= 768,
+	showArtwork: window.innerWidth >= 992,
 });
 
 let resizeCleanup: (() => void) | undefined;
@@ -108,7 +108,7 @@ onMounted(() => {
 	resizeCleanup = onWindowResizeHandler(async () => {
 		await nextTick(() => {
 			options.scrollerHeight = window.innerHeight;
-			options.showArtwork = window.innerWidth >= 768;
+			options.showArtwork = window.innerWidth >= 992;
 		});
 	});
 });
@@ -261,22 +261,9 @@ const login2FAForm = (formEl: FormInstance | undefined) => {
 	}
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
-	.left-layout {
-		gap: 10px;
-	}
-
-	.circle-logo-img {
-		max-width: 90px;
-	}
-
-	.text-logo-img {
-		max-width: 180px;
-	}
-
-	.mascot-img {
-		max-width: 210px;
-		transform: translateY(clamp(32px, 6vh, 50px));
+@media (min-width: 768px) and (max-width: 991.98px) {
+	.right-column {
+		right: 0;
 	}
 }
 
