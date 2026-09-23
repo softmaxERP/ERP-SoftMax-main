@@ -1122,18 +1122,18 @@ export const useConnectStateStore = defineStore('connectState', {
 					} else {
 						ElMessage.warning('Data not found');
 						if (!!callbackError) {
-							callbackError();
+							// ส่ง body ให้ caller ด้วย — เดิมเรียกเปล่า ทำให้ widget ได้ err = undefined
+							callbackError({ message: 'Data not found', response: response.data });
 						}
 					}
 				})
 				.catch((error) => {
-					if (!!error.response && !!error.response.data && !!error.response.data.message) {
-						ElMessage.warning(error.response.data.message);
-					} else {
-						ElMessage.warning(error.message);
-					}
+					// เอาข้อความจาก backend (เช่น "API Error: …") เป็นหลัก — error.message ของ axios บอกแค่ status
+					const message: string =
+						!!error.response && !!error.response.data && !!error.response.data.message ? error.response.data.message : error.message;
+					ElMessage.warning(message);
 					if (!!callbackError) {
-						callbackError();
+						callbackError({ message: message, status: error.response ? error.response.status : null, response: error.response ? error.response.data : null });
 					}
 				});
 		},

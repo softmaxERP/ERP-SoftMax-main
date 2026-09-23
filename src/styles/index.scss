@@ -591,7 +591,9 @@ code {
 .pcard-vitals {
   flex: none;
   display: flex;
-  align-items: stretch;
+  /* 🔴 center ไม่ใช่ stretch — คอลัมน์ปุ่ม (.pcard-vital-actions) เรียงแนวตั้ง 3 ปุ่ม
+     จึงสูงกว่าการ์ดค่า ถ้า stretch การ์ดทุกใบจะยืดตามปุ่ม (เห็นชัดที่ใบมีพื้นหลัง is-warning/is-danger) */
+  align-items: center;
   gap: 6px;
 }
 .pcard-vital {
@@ -815,6 +817,9 @@ code {
     flex-basis: 100%;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* จอแคบเป็นกริด 2 คอลัมน์ — ใบในแถวเดียวกันต้องสูงเท่ากันถึงจะเป็นตาราง
+       ⇒ ทับ center ของ base กลับเป็น stretch เฉพาะโหมดนี้ */
+    align-items: stretch;
     gap: 8px;
   }
   .pcard-vital { min-width: 0; }
